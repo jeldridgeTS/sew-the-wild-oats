@@ -6,8 +6,8 @@ import { useEffect } from "react";
 import Image from "next/image";
 
 export function EmblaCarousel() {
-  // const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
+  // const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
   useEffect(() => {
     if (emblaApi) {
