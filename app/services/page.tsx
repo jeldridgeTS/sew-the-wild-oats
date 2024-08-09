@@ -1,9 +1,7 @@
+// import { EmblaCarousel } from "@/components/carousel";
+import { Hero } from "@/components/hero";
 import { title } from "@/components/primitives";
 
 export default function PricingPage() {
-  return (
-    <div>
-      <h1 className={title()}>Services</h1>
-    </div>
-  );
+  return <Hero />;
 }
