@@ -2,18 +2,45 @@
 
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { useEffect } from "react";
-import Image from "next/image";
+import { useCallback, useEffect } from "react";
+import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 
-export function EmblaCarousel() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
-  // const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+import { DotButton, useDotButton } from "./carousel/carouselDotButton";
+// import Image from "next/image";
 
-  useEffect(() => {
-    if (emblaApi) {
-      console.log(emblaApi.slideNodes()); // Access API
-    }
-  }, [emblaApi]);
+type PropType = {
+  // slides: number[];
+  options?: EmblaOptionsType;
+};
+
+const EmblaCarousel: React.FC<PropType> = (props) => {
+  const { options } = props;
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
+  // const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay()]);
+
+  const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
+    const autoplay = emblaApi?.plugins()?.autoplay;
+
+    if (!autoplay) return;
+
+    const resetOrStop =
+      autoplay.options.stopOnInteraction === false
+        ? autoplay.reset
+        : autoplay.stop;
+
+    resetOrStop();
+  }, []);
+
+  const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
+    emblaApi,
+    onNavButtonClick
+  );
+
+  // useEffect(() => {
+  //   if (emblaApi) {
+  //     console.log(emblaApi.slideNodes()); // Access API
+  //   }
+  // }, [emblaApi]);
 
   return (
     <section ref={emblaRef} className="embla">
@@ -46,6 +73,22 @@ export function EmblaCarousel() {
           />
         </div>
       </div>
+
+      <div className="embla__controls">
+        <div className="embla__dots">
+          {scrollSnaps.map((_, index) => (
+            <DotButton
+              key={index}
+              className={"embla__dot".concat(
+                index === selectedIndex ? " embla__dot--selected" : ""
+              )}
+              onClick={() => onDotButtonClick(index)}
+            />
+          ))}
+        </div>
+      </div>
     </section>
   );
-}
+};
+
+export default EmblaCarousel;
