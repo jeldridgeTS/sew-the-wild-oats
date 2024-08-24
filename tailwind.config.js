@@ -1,16 +1,56 @@
-import {nextui} from '@nextui-org/theme'
+import { nextui } from "@nextui-org/theme";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {},
   },
   darkMode: "class",
-  darkMode: "class",
- plugins: [nextui()],
-}
+  lightMode: "class",
+  plugins: [
+    nextui({
+      themes: {
+        "sew-light": {
+          extend: "light", // <- inherit default values from dark theme
+          colors: {
+            background: "#447604",
+            foreground: "#E3D888",
+            primary: {
+              50: "#fdfcdd",
+              100: "#f7f4b5",
+              200: "#f2ed89",
+              300: "#ede55c",
+              400: "#e8de30",
+              500: "#cfc517",
+              600: "#a1990e",
+              700: "#736d07",
+              800: "#454201",
+              900: "#181600",
+              DEFAULT: "#E8DE30",
+              foreground: "#ffffff",
+            },
+            focus: "#F182F6",
+          },
+          layout: {
+            disabledOpacity: "0.3",
+            radius: {
+              small: "4px",
+              medium: "6px",
+              large: "8px",
+            },
+            borderWidth: {
+              small: "1px",
+              medium: "2px",
+              large: "3px",
+            },
+          },
+        },
+      },
+    }),
+  ],
+};
