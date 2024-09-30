@@ -1,5 +1,3 @@
-// import { button as buttonStyles } from "@nextui-org/theme";
-
 import { Hero } from "@/components/hero";
 
 export default function Home() {
