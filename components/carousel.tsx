@@ -74,7 +74,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
         </div>
       </div>
 
-      <div className="embla__controls">
+      <div className="embla__controls w-full flex items-center justify-center">
         <div className="embla__dots">
           {scrollSnaps.map((_, index) => (
             <DotButton
