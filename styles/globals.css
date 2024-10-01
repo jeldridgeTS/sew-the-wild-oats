@@ -9,6 +9,7 @@
 .embla {
   overflow: hidden;
   position: relative;
+  width: -webkit-fill-available;
 }
 .embla__container {
   display: flex;
