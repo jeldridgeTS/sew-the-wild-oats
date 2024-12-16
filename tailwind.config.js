@@ -18,8 +18,8 @@ module.exports = {
         "sew-light": {
           extend: "light", // <- inherit default values from dark theme
           colors: {
-            background: "#447604",
-            foreground: "#E3D888",
+            background: "#CCEDD9",
+            foreground: "#254E70",
             primary: {
               50: "#fdfcdd",
               100: "#f7f4b5",
@@ -34,7 +34,9 @@ module.exports = {
               DEFAULT: "#E8DE30",
               foreground: "#ffffff",
             },
+            secondary: "#EE964B",
             focus: "#F182F6",
+            linkHover: "#D1603D",
           },
           layout: {
             disabledOpacity: "0.3",
