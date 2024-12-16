@@ -43,7 +43,10 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   // }, [emblaApi]);
 
   return (
-    <section ref={emblaRef} className="embla">
+    <section
+      ref={emblaRef}
+      className="embla flex flex-col items-center justify-center gap-4 h-embla"
+    >
       <div className="embla__container">
         <div className="embla__slide">
           <img
