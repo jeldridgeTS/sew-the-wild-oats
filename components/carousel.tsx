@@ -2,7 +2,7 @@
 
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 
 import { DotButton, useDotButton } from "./carousel/carouselDotButton";
@@ -43,7 +43,10 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   // }, [emblaApi]);
 
   return (
-    <section ref={emblaRef} className="embla">
+    <section
+      ref={emblaRef}
+      className="embla flex flex-col items-center justify-center gap-4 h-embla"
+    >
       <div className="embla__container">
         <div className="embla__slide">
           <img
