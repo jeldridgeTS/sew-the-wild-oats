@@ -8,7 +8,6 @@ import { siteConfig } from "@/config/site";
 import { fontCaladea } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import Footer from "@/components/footer";
-import ServicesSection from "@/components/servicesSection";
 
 export const metadata: Metadata = {
   title: {
@@ -46,7 +45,6 @@ export default function RootLayout({
           <div className="relative flex flex-col h-screen">
             <Navbar />
             <main className="container flex-grow max-w-full">{children}</main>
-            <ServicesSection />
             <Footer />
           </div>
         </Providers>

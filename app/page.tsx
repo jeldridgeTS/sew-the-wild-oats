@@ -1,7 +1,13 @@
 import { Hero } from "@/components/hero";
+import ServicesSection from "@/components/servicesSection";
 
 export default function Home() {
-  return <Hero />;
+  return (
+    <>
+      <Hero />
+      <ServicesSection />
+    </>
+  );
 }
 
 {
