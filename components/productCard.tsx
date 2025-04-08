@@ -1,18 +1,34 @@
 import Link from "next/link";
+// eslint-disable-next-line import/order
 import clsx from "clsx";
 
-import { ToteBageIcon } from "./icons";
+// import { ToteBageIcon } from "./icons";
+
+import Image from "next/image";
 
 import { fontCaladea } from "@/config/fonts";
+import SvgImgCircle from "@/components/svgImgCircle";
 
 export default function ProductCard() {
   return (
     <div
       className={`border-4 border-solid border-primary w-auto h-auto rounded-2xl bg-white`}
     >
-      <div className="flex flex-col items-center justify-between pt-9 px-6 pb-6 relative">
+      <div
+        className="flex flex-col items-center justify-between pt-9 px-6 pb-6 relative"
+        style={{ position: "relative" }}
+      >
         <span className="relative mx-auto -mt-16 mb-8">
-          <ToteBageIcon />
+          {/* <ToteBageIcon /> */}
+          <SvgImgCircle />
+          <Image
+            alt="Your Image"
+            height={100}
+            objectFit="cover"
+            src="/static/images/toteBag.png"
+            style={{ width: "60%", height: "auto", position: "relative" }}
+            width={100}
+          />
         </span>
         <h5
           className={clsx(

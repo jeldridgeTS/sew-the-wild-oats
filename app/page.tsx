@@ -1,11 +1,11 @@
 import { Hero } from "@/components/hero";
-import ServicesSection from "@/components/servicesSection";
+import ProductServiceTabs from "@/components/productServiceTabs";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <ServicesSection />
+      <ProductServiceTabs />
     </>
   );
 }
