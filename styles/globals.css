@@ -78,3 +78,11 @@
 .embla__dot--selected:after {
   box-shadow: inset 0 0 0 0.14rem var(--tw-ring-offset-color);
 }
+
+/* .test {
+  backColor: #CCEDD9;
+  foreColor: #254E70;
+  secColor: #EE964B;
+  focusColor: #F182F6;
+  iconColor: #D1603D
+} */
