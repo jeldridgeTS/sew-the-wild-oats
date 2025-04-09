@@ -7,7 +7,7 @@ import { fontCaladea } from "@/config/fonts";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("admin");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState("");
@@ -33,15 +33,22 @@ export default function AdminLoginPage() {
         body: JSON.stringify({ username, password }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
+      // Parse the response regardless of status
+      const data = await response.json();
 
-        throw new Error(errorData.message || "Login failed");
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
       }
 
+      // Successfully authenticated
+
       // Successful login - redirect to admin dashboard
-      router.push("/admin");
-      router.refresh(); // Force a refresh to clear the middleware cache
+      // Use await to ensure redirect happens
+      await router.push("/admin");
+      // Add a slight delay before refresh to ensure cookies are processed
+      setTimeout(() => {
+        window.location.href = "/admin";
+      }, 100);
     } catch (err: any) {
       // eslint-disable-next-line no-console
       console.error("Login error:", err);
@@ -77,10 +84,10 @@ export default function AdminLoginPage() {
                   Username
                 </label>
                 <input
-                  disabled // Admin username is fixed for this demo
-                  required
                   className="w-full px-3 py-2 border rounded-md"
                   id="username"
+                  placeholder="Enter admin username"
+                  required
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -92,9 +99,9 @@ export default function AdminLoginPage() {
                   Password
                 </label>
                 <input
-                  required
                   className="w-full px-3 py-2 border rounded-md"
                   id="password"
+                  required
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -112,8 +119,7 @@ export default function AdminLoginPage() {
             </form>
 
             <div className="mt-4 text-center text-sm text-gray-600">
-              <p>Demo Credentials:</p>
-              <p>Username: admin / Password: admin123</p>
+              <p>Enter your admin credentials to log in</p>
             </div>
           </div>
         </div>
