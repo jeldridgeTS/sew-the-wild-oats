@@ -1,0 +1,20 @@
+[
+  {
+    "id": "product1",
+    "title": "Handcrafted",
+    "description": "Beautiful, one-of-a-kind quilts made with love and attention to detail. Each quilt tells a story through its patterns and fabrics.",
+    "image": "/quilt.jpg"
+  },
+  {
+    "id": "product2",
+    "title": "Custom Embroidery",
+    "description": "Personalized embroidery for special occasions. Add names, dates, or custom designs to make your textiles truly unique.",
+    "image": "/horse.jpg"
+  },
+  {
+    "id": "product3",
+    "title": "Decorative Pillows",
+    "description": "Accent pillows that add comfort and style to any space. Available in various fabrics, patterns, and sizes to match your decor.",
+    "image": "/goat.jpg"
+  }
+]
