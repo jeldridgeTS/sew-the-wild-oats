@@ -1,4 +1,10 @@
-import { supabase } from "./supabase";
+import { createClient } from "@supabase/supabase-js";
+
+// Create an admin client with the service role key for storage operations that need to bypass RLS
+const adminSupabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+  process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+);
 
 /**
  * Upload an image to Supabase Storage
@@ -10,7 +16,7 @@ import { supabase } from "./supabase";
 export async function uploadImage(
   file: File,
   bucket = "images",
-  path = ""
+  path = "",
 ): Promise<string | null> {
   try {
     // Create a unique file name
@@ -18,8 +24,8 @@ export async function uploadImage(
     const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
     const filePath = path ? `${path}/${fileName}` : fileName;
 
-    // Upload file to Supabase Storage
-    const { data, error } = await supabase.storage
+    // Upload file to Supabase Storage using admin client to bypass RLS
+    const { data, error } = await adminSupabase.storage
       .from(bucket)
       .upload(filePath, file, {
         cacheControl: "3600",
@@ -36,7 +42,7 @@ export async function uploadImage(
     // Get the public URL for the file
     const {
       data: { publicUrl },
-    } = supabase.storage.from(bucket).getPublicUrl(data.path);
+    } = adminSupabase.storage.from(bucket).getPublicUrl(data.path);
 
     return publicUrl;
   } catch (error) {
@@ -55,7 +61,7 @@ export async function uploadImage(
  */
 export async function deleteImage(
   url: string,
-  bucket = "images"
+  bucket = "images",
 ): Promise<boolean> {
   try {
     // Extract the path from the URL
@@ -69,8 +75,8 @@ export async function deleteImage(
       return false;
     }
 
-    // Delete file from Supabase Storage
-    const { error } = await supabase.storage.from(bucket).remove([path]);
+    // Delete file from Supabase Storage using admin client to bypass RLS
+    const { error } = await adminSupabase.storage.from(bucket).remove([path]);
 
     if (error) {
       // eslint-disable-next-line no-console

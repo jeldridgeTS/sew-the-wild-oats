@@ -126,6 +126,7 @@ export default function EditServicePage({
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // Include authentication cookies
         body: JSON.stringify(formData),
       });
 

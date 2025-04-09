@@ -181,17 +181,6 @@ export default function ProductServiceTabs() {
 
   return (
     <section className="py-12 px-4 md:px-6 lg:py-16 bg-[#efefef]">
-      <div className="max-w-5xl mx-auto text-center mb-12">
-        <h2
-          className={`text-4xl font-bold text-[#634647] ${fontCaladea.className}`}
-        >
-          Our Offerings
-        </h2>
-        <p className="mt-4 text-lg text-gray-600">
-          Discover our range of handcrafted products and personalized services
-        </p>
-      </div>
-
       {/* Tab Buttons */}
       <div className="flex justify-center mb-12">
         <div className="inline-flex rounded-md shadow-md p-1 bg-white">

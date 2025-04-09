@@ -56,6 +56,7 @@ export default function AdminProductsPage() {
       try {
         const response = await fetch(`/api/products/${id}`, {
           method: "DELETE",
+          credentials: "include", // Include authentication cookies
         });
 
         if (!response.ok) {
