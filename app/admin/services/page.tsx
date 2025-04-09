@@ -54,6 +54,7 @@ export default function AdminServicesPage() {
       try {
         const response = await fetch(`/api/services/${id}`, {
           method: "DELETE",
+          credentials: "include", // Include authentication cookies
         });
 
         if (!response.ok) {
