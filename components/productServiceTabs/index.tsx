@@ -5,7 +5,8 @@ import Image from "next/image";
 // NextUI imports
 import { Tabs, Tab, Accordion, AccordionItem } from "@nextui-org/react";
 
-// Local imports
+// Import CSS module
+import styles from "./styles.module.css";
 
 // Define types for products and services
 type Item = {
@@ -18,7 +19,7 @@ type Item = {
 export default function ProductServiceTabs() {
   // State to track active tab and expanded accordion item
   const [activeTab, setActiveTab] = useState<"products" | "services">(
-    "products"
+    "products",
   );
   const [expandedItem, setExpandedItem] = useState<string>("");
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
@@ -139,10 +140,10 @@ export default function ProductServiceTabs() {
 
   if (isLoading) {
     return (
-      <section className="py-12 px-4">
-        <div className="max-w-5xl mx-auto text-center">
+      <section className={styles.loadingContainer}>
+        <div className={styles.loadingContent}>
           <div className="flex justify-center">
-            <div className="w-10 h-10 border-4 border-t-[#634647] border-[#ddad81] rounded-full animate-spin" />
+            <div className={styles.spinner} />
           </div>
           <p className="mt-4 text-gray-600">Loading content...</p>
         </div>
@@ -152,17 +153,17 @@ export default function ProductServiceTabs() {
 
   if (error) {
     return (
-      <section className="py-12 px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-red-500">{error}</p>
+      <section className={styles.errorContainer}>
+        <div className={styles.errorContent}>
+          <p className={styles.errorMessage}>{error}</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-12 px-4 bg-[#fdfaf8]">
-      <div className="max-w-5xl mx-auto">
+    <section className={styles.container}>
+      <div className={styles.tabsContainer}>
         {/* Tabs */}
         <Tabs
           aria-label="Product and Service Options"
@@ -185,17 +186,17 @@ export default function ProductServiceTabs() {
         </Tabs>
 
         {/* Content Grid */}
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className={styles.contentGrid}>
           {/* Left side - Image */}
-          <div className="flex justify-center">
-            <div className="relative w-full max-w-md aspect-square bg-white rounded-lg p-4 border overflow-hidden">
+          <div className={styles.imageContainer}>
+            <div className={styles.imageWrapper}>
               {!isCurrentImageLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
-                  <div className="w-10 h-10 border-4 border-t-[#634647] border-[#ddad81] rounded-full animate-spin" />
+                <div className={styles.loadingSpinner}>
+                  <div className={styles.spinner} />
                 </div>
               )}
               <div
-                className="transition-opacity duration-150 ease-in-out"
+                className={styles.imageContent}
                 style={{ opacity: isCurrentImageLoaded ? 1 : 0 }}
               >
                 {selectedItem && (
@@ -212,7 +213,7 @@ export default function ProductServiceTabs() {
                     onError={(e) => {
                       // eslint-disable-next-line no-console
                       console.log(
-                        `Failed to load image: ${selectedItem.image}`
+                        `Failed to load image: ${selectedItem.image}`,
                       );
                       // Fallback to placeholder if image fails to load
                       const target = e.target as HTMLImageElement;
@@ -243,9 +244,9 @@ export default function ProductServiceTabs() {
           </div>
 
           {/* Right side - Accordion */}
-          <div className="flex flex-col space-y-4">
+          <div className={styles.accordionContainer}>
             <Accordion
-              className="bg-white"
+              className={styles.accordionWrapper}
               selectedKeys={[expandedItem]}
               selectionMode="single"
               variant="bordered"
