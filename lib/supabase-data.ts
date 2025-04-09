@@ -76,7 +76,7 @@ export async function getProductById(id: string): Promise<Product | null> {
  * Add a new product
  */
 export async function addProduct(
-  product: Omit<Product, "id" | "created_at">
+  product: Omit<Product, "id" | "created_at">,
 ): Promise<Product | null> {
   // Log the product being inserted
   // eslint-disable-next-line no-console
@@ -130,7 +130,7 @@ export async function addProduct(
  */
 export async function updateProduct(
   id: string,
-  updates: Partial<Omit<Product, "id" | "created_at">>
+  updates: Partial<Omit<Product, "id" | "created_at">>,
 ): Promise<Product | null> {
   try {
     // Use adminSupabase client to bypass RLS
@@ -252,7 +252,7 @@ export async function getServiceById(id: string): Promise<Service | null> {
  * Add a new service
  */
 export async function addService(
-  service: Omit<Service, "id" | "created_at">
+  service: Omit<Service, "id" | "created_at">,
 ): Promise<Service | null> {
   // Log the service being inserted
   // eslint-disable-next-line no-console
@@ -301,7 +301,7 @@ export async function addService(
  */
 export async function updateService(
   id: string,
-  updates: Partial<Omit<Service, "id" | "created_at">>
+  updates: Partial<Omit<Service, "id" | "created_at">>,
 ): Promise<Service | null> {
   try {
     // Use adminSupabase client to bypass RLS
