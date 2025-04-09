@@ -2,7 +2,7 @@
 
 .container {
   padding: 3rem 1rem;
-  background-color: #fdfaf8;
+  background-color: #f0ec99;
 }
 
 .tabsContainer {
@@ -105,11 +105,13 @@
 }
 
 /* Loading and error states */
-.loadingContainer, .errorContainer {
+.loadingContainer,
+.errorContainer {
   padding: 3rem 1rem;
 }
 
-.loadingContent, .errorContent {
+.loadingContent,
+.errorContent {
   max-width: 64rem;
   margin: 0 auto;
   text-align: center;

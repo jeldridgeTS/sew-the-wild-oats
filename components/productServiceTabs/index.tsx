@@ -19,7 +19,7 @@ type Item = {
 export default function ProductServiceTabs() {
   // State to track active tab and expanded accordion item
   const [activeTab, setActiveTab] = useState<"products" | "services">(
-    "products",
+    "products"
   );
   const [expandedItem, setExpandedItem] = useState<string>("");
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
@@ -165,22 +165,22 @@ export default function ProductServiceTabs() {
     <section className={styles.container}>
       <div className={styles.tabsContainer}>
         {/* Custom Tabs - with proper accessibility */}
-        <div 
+        <div
           aria-label="Product and Service Options"
-          className="flex justify-center mb-10" 
+          className="flex justify-center mb-10"
           role="tablist"
         >
           <div className="flex space-x-12">
             <button
               aria-controls="products-panel"
               aria-selected={activeTab === "products"}
-              className={`${styles.tabItem} ${styles.tabItemHover} ${activeTab === "products" ? styles.tabItemSelected : ""} group focus:outline-none focus:ring-2 focus:ring-[#634647] focus:ring-offset-2 rounded-sm`}
+              className={`${styles.tabItem} ${styles.tabItemHover} ${activeTab === "products" ? styles.tabItemSelected : ""}`}
               id="products-tab"
+              role="tab"
               onClick={() => handleTabChange("products")}
-              onKeyDown={(e) => 
+              onKeyDown={(e) =>
                 e.key === "Enter" && handleTabChange("products")
               }
-              role="tab"
             >
               Products
               <span className={styles.tabUnderline} />
@@ -188,13 +188,13 @@ export default function ProductServiceTabs() {
             <button
               aria-controls="services-panel"
               aria-selected={activeTab === "services"}
-              className={`${styles.tabItem} ${styles.tabItemHover} ${activeTab === "services" ? styles.tabItemSelected : ""} group focus:outline-none focus:ring-2 focus:ring-[#634647] focus:ring-offset-2 rounded-sm`}
+              className={`${styles.tabItem} ${styles.tabItemHover} ${activeTab === "services" ? styles.tabItemSelected : ""}`}
               id="services-tab"
+              role="tab"
               onClick={() => handleTabChange("services")}
-              onKeyDown={(e) => 
+              onKeyDown={(e) =>
                 e.key === "Enter" && handleTabChange("services")
               }
-              role="tab"
             >
               Services
               <span className={styles.tabUnderline} />
@@ -203,13 +203,12 @@ export default function ProductServiceTabs() {
         </div>
 
         {/* Content Grid - with proper accessibility */}
-        <div 
+        <div
           aria-labelledby={`${activeTab}-tab`}
           className={styles.contentGrid}
           id={`${activeTab}-panel`}
           role="tabpanel"
         >
-
           {/* Left side - Image */}
           <div className={styles.imageContainer}>
             <div className={styles.imageWrapper}>
@@ -236,7 +235,7 @@ export default function ProductServiceTabs() {
                     onError={(e) => {
                       // eslint-disable-next-line no-console
                       console.log(
-                        `Failed to load image: ${selectedItem.image}`,
+                        `Failed to load image: ${selectedItem.image}`
                       );
                       // Fallback to placeholder if image fails to load
                       const target = e.target as HTMLImageElement;
