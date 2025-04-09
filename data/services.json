@@ -1,0 +1,20 @@
+[
+  {
+    "id": "service1",
+    "title": "Custom Sewing",
+    "description": "Tailored garments made to your exact specifications. Perfect for special occasions or unique everyday pieces that reflect your personal style.",
+    "image": "/sewing.jpg"
+  },
+  {
+    "id": "service2",
+    "title": "Alterations",
+    "description": "Professional alterations to ensure your clothes fit perfectly. From simple hem adjustments to complex restructuring of garments.",
+    "image": "/alterations.jpg"
+  },
+  {
+    "id": "service3",
+    "title": "Pattern Making",
+    "description": "Custom patterns created from your designs or ideas. Turn your fashion concepts into reality with professionally drafted patterns.",
+    "image": "/pattern.jpg"
+  }
+]

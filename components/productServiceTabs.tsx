@@ -1,12 +1,11 @@
 /**
- * ProductServiceTabs - A tabbed interface component that displays products and services 
+ * ProductServiceTabs - A tabbed interface component that displays products and services
  * with expandable accordion items and dynamic image display
  */
 "use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-
 // Third-party imports
 import clsx from "clsx";
 
@@ -21,90 +20,95 @@ type Item = {
   image: string;
 };
 
-// Sample data with actual images
-const productData: Item[] = [
-  {
-    id: "product1",
-    title: "Handmade Quilts",
-    description: "Unique, hand-stitched quilts made with care and attention to detail. Each piece tells a story through carefully selected fabrics and patterns.",
-    image: "/quilt.jpg", // Image in public directory
-  },
-  {
-    id: "product2",
-    title: "Custom Clothing",
-    description: "Bespoke clothing items designed to your specifications. From casual wear to special occasion pieces, each garment is tailored to fit perfectly.",
-    image: "/moxxiwork.jpg", // Image in public directory
-  },
-  {
-    id: "product3",
-    title: "Home Decor",
-    description: "Handcrafted home accents that bring warmth and character to any space. From pillows to wall hangings, each piece is designed to complement your home.",
-    image: "/horse.jpg", // Image in public directory
-  },
-];
-
-const serviceData: Item[] = [
-  {
-    id: "service1",
-    title: "Custom Quilting",
-    description: "Commission a quilt made to your specifications. Choose your fabrics, patterns, and size for a truly unique heirloom piece.",
-    image: "/quilt.jpg", // Image in public directory
-  },
-  {
-    id: "service2",
-    title: "Sewing Lessons",
-    description: "Learn the art of sewing from an experienced craftsperson. Classes available for all skill levels from beginner to advanced.",
-    image: "/moxxiwork.jpg", // Image in public directory
-  },
-  {
-    id: "service3",
-    title: "Clothing Alterations",
-    description: "Professional alterations to ensure your garments fit perfectly. From simple hemming to complex restructuring, we can help your clothes look their best.",
-    image: "/goat.jpg", // Image in public directory
-  },
-];
-
-// Placeholder image to use in case of loading errors
-const placeholderImage = "/quilt.jpg"; // Fallback to a known working image
-
 export default function ProductServiceTabs() {
   // State to track active tab and expanded accordion item
   const [activeTab, setActiveTab] = useState<"products" | "services">(
-    "products",
+    "products"
   );
-  const [expandedItem, setExpandedItem] = useState<string>(
-    activeTab === "products" ? productData[0].id : serviceData[0].id,
-  );
+  const [expandedItem, setExpandedItem] = useState<string>("");
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+  const [products, setProducts] = useState<Item[]>([]);
+  const [services, setServices] = useState<Item[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Fetch products and services from API
+  useEffect(() => {
+    async function fetchData() {
+      setIsLoading(true);
+      try {
+        // Fetch products
+        const productsResponse = await fetch("/api/products");
+
+        if (!productsResponse.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        const productsData = await productsResponse.json();
+
+        // Fetch services
+        const servicesResponse = await fetch("/api/services");
+
+        if (!servicesResponse.ok) {
+          throw new Error("Failed to fetch services");
+        }
+        const servicesData = await servicesResponse.json();
+
+        setProducts(productsData);
+        setServices(servicesData);
+
+        // Set default expanded item
+        if (productsData.length > 0 && expandedItem === "") {
+          setExpandedItem(productsData[0].id);
+        }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error("Error fetching data:", err);
+        setError("Failed to load content. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   // Get current data based on active tab
-  const currentData = activeTab === "products" ? productData : serviceData;
-  
+  const currentData = activeTab === "products" ? products : services;
+
   // Find the currently selected item for image display
   const selectedItem =
-    currentData.find((item) => item.id === expandedItem) || currentData[0];
+    currentData.find((item) => item.id === expandedItem) ||
+    (currentData.length > 0 ? currentData[0] : null);
 
   // Check if the current image is loaded
-  const isCurrentImageLoaded = loadedImages.has(selectedItem.image);
+  const isCurrentImageLoaded = selectedItem
+    ? loadedImages.has(selectedItem.image)
+    : false;
 
-  // Eagerly preload all images immediately when component mounts
+  // Eagerly preload all images immediately when component mounts or data changes
   useEffect(() => {
     // Preload all images at once
-    const allItems = [...productData, ...serviceData];
-    
+    const allItems = [...products, ...services];
+
+    if (allItems.length === 0) return;
+
     // Create an array of promises for all image loads
     const preloadPromises = allItems.map((item) => {
       return new Promise<void>((resolve) => {
         if (loadedImages.has(item.image)) {
           resolve(); // Already loaded
+
           return;
         }
 
         const img = new window.Image();
+
         img.onload = () => {
           setLoadedImages((prev) => {
             const newSet = new Set(prev);
+
             newSet.add(item.image);
+
             return newSet;
           });
           resolve();
@@ -116,15 +120,18 @@ export default function ProductServiceTabs() {
 
     // Run all preloads in parallel
     Promise.all(preloadPromises).catch(() => {
-      // Catch any errors but continue
+      // Silent catch
     });
-  }, []);
+  }, [products, services, loadedImages]);
 
   // Handle tab change
   const handleTabChange = (tab: "products" | "services") => {
     setActiveTab(tab);
-    // Set the first item as expanded when changing tabs
-    setExpandedItem(tab === "products" ? productData[0].id : serviceData[0].id);
+    if (tab === "products" && products.length > 0) {
+      setExpandedItem(products[0].id);
+    } else if (tab === "services" && services.length > 0) {
+      setExpandedItem(services[0].id);
+    }
   };
 
   // Handle accordion toggle
@@ -132,34 +139,83 @@ export default function ProductServiceTabs() {
     setExpandedItem(itemId);
   };
 
+  // Placeholder image to use in case of loading errors
+  const placeholderImage = "/quilt.jpg"; // Fallback to a known working image
+
+  if (isLoading) {
+    return (
+      <section className="py-12 px-4 md:px-6 lg:py-16 bg-[#efefef]">
+        <div className="max-w-5xl mx-auto text-center mb-12">
+          <div className="w-16 h-16 border-4 border-t-[#634647] border-[#ddad81] rounded-full animate-spin mx-auto" />
+          <p className="mt-4 text-gray-600">Loading products and services...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-12 px-4 md:px-6 lg:py-16 bg-[#efefef]">
+        <div className="max-w-5xl mx-auto text-center mb-12">
+          <p className="text-red-600">{error}</p>
+          <button
+            className="mt-4 px-4 py-2 bg-[#634647] text-white rounded"
+            onClick={() => window.location.reload()}
+          >
+            Try Again
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  if (!selectedItem) {
+    return (
+      <section className="py-12 px-4 md:px-6 lg:py-16 bg-[#efefef]">
+        <div className="max-w-5xl mx-auto text-center mb-12">
+          <p className="text-gray-600">No items available at this moment.</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className={`${fontCaladea.className} min-h-screen bg-[#f8f38d] py-16`}>
-      {/* Tabs */}
-      <div className="max-w-5xl mx-auto mb-12">
-        <div className="flex justify-center space-x-16 text-2xl font-medium">
+    <section className="py-12 px-4 md:px-6 lg:py-16 bg-[#efefef]">
+      <div className="max-w-5xl mx-auto text-center mb-12">
+        <h2
+          className={`text-4xl font-bold text-[#634647] ${fontCaladea.className}`}
+        >
+          Our Offerings
+        </h2>
+        <p className="mt-4 text-lg text-gray-600">
+          Discover our range of handcrafted products and personalized services
+        </p>
+      </div>
+
+      {/* Tab Buttons */}
+      <div className="flex justify-center mb-12">
+        <div className="inline-flex rounded-md shadow-md p-1 bg-white">
           <button
             className={clsx(
-              "py-2 relative",
-              activeTab === "products" ? "font-bold" : "text-gray-500",
+              "px-6 py-3 rounded-md font-medium",
+              activeTab === "products"
+                ? "bg-[#634647] text-white"
+                : "text-gray-600 hover:text-[#634647]"
             )}
             onClick={() => handleTabChange("products")}
           >
             Products
-            {activeTab === "products" && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black" />
-            )}
           </button>
           <button
             className={clsx(
-              "py-2 relative",
-              activeTab === "services" ? "font-bold" : "text-gray-500",
+              "px-6 py-3 rounded-md font-medium",
+              activeTab === "services"
+                ? "bg-[#634647] text-white"
+                : "text-gray-600 hover:text-[#634647]"
             )}
             onClick={() => handleTabChange("services")}
           >
             Services
-            {activeTab === "services" && (
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black" />
-            )}
           </button>
         </div>
       </div>
@@ -174,34 +230,42 @@ export default function ProductServiceTabs() {
                 <div className="w-10 h-10 border-4 border-t-[#634647] border-[#ddad81] rounded-full animate-spin" />
               </div>
             )}
-            <div className="transition-opacity duration-150 ease-in-out" 
-                style={{ opacity: isCurrentImageLoaded ? 1 : 0 }}>
+            <div
+              className="transition-opacity duration-150 ease-in-out"
+              style={{ opacity: isCurrentImageLoaded ? 1 : 0 }}
+            >
               <Image
                 fill
                 priority
-                loading="eager"
+                unoptimized // Bypass Next.js image optimization for troubleshooting
                 alt={selectedItem.title}
+                loading="eager"
+                quality={80}
+                sizes="(max-width: 768px) 100vw, 400px"
                 src={selectedItem.image || placeholderImage}
                 style={{ objectFit: "contain", objectPosition: "center" }}
-                sizes="(max-width: 768px) 100vw, 400px"
-                quality={80}
-                unoptimized // Bypass Next.js image optimization for troubleshooting
                 onError={(e) => {
+                  // eslint-disable-next-line no-console
                   console.log(`Failed to load image: ${selectedItem.image}`);
                   // Fallback to placeholder if image fails to load
                   const target = e.target as HTMLImageElement;
+
                   target.src = placeholderImage;
                   // Add to loaded images set to hide spinner
                   setLoadedImages((prev) => {
                     const newSet = new Set(prev);
+
                     newSet.add(selectedItem.image);
+
                     return newSet;
                   });
                 }}
                 onLoad={() => {
                   setLoadedImages((prev) => {
                     const newSet = new Set(prev);
+
                     newSet.add(selectedItem.image);
+
                     return newSet;
                   });
                 }}
