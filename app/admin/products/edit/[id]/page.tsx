@@ -253,10 +253,10 @@ export default function EditProductPage({
                       fill
                       unoptimized // Remove in production
                       alt="" /* Removing alt text content to prevent labels */
-                      title={image.alt} /* Keeping the title for tooltips */
-                      className="object-cover"
+                      className="object-cover" /* Keeping the title for tooltips */
                       sizes="(max-width: 768px) 50vw, 33vw"
                       src={image.src}
+                      title={image.alt}
                     />
                   </div>
                 </button>
