@@ -1,13 +1,9 @@
-/**
- * ProductServiceTabs - A tabbed interface component that displays products and services
- * with expandable accordion items and dynamic image display
- */
 "use client";
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-// Third-party imports
-import clsx from "clsx";
+// NextUI imports
+import { Tabs, Tab, Accordion, AccordionItem } from "@nextui-org/react";
 
 // Local imports
 
@@ -138,15 +134,17 @@ export default function ProductServiceTabs() {
     setExpandedItem(itemId);
   };
 
-  // Placeholder image to use in case of loading errors
-  const placeholderImage = "/quilt.jpg"; // Fallback to a known working image
+  // Placeholder image for error fallback
+  const placeholderImage = "/placeholder-image.jpg";
 
   if (isLoading) {
     return (
-      <section className="py-12 px-4 md:px-6 lg:py-16 bg-[#efefef]">
-        <div className="max-w-5xl mx-auto text-center mb-12">
-          <div className="w-16 h-16 border-4 border-t-[#634647] border-[#ddad81] rounded-full animate-spin mx-auto" />
-          <p className="mt-4 text-gray-600">Loading products and services...</p>
+      <section className="py-12 px-4">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="flex justify-center">
+            <div className="w-10 h-10 border-4 border-t-[#634647] border-[#ddad81] rounded-full animate-spin" />
+          </div>
+          <p className="mt-4 text-gray-600">Loading content...</p>
         </div>
       </section>
     );
@@ -154,166 +152,127 @@ export default function ProductServiceTabs() {
 
   if (error) {
     return (
-      <section className="py-12 px-4 md:px-6 lg:py-16 bg-[#efefef]">
-        <div className="max-w-5xl mx-auto text-center mb-12">
-          <p className="text-red-600">{error}</p>
-          <button
-            className="mt-4 px-4 py-2 bg-[#634647] text-white rounded"
-            onClick={() => window.location.reload()}
-          >
-            Try Again
-          </button>
-        </div>
-      </section>
-    );
-  }
-
-  if (!selectedItem) {
-    return (
-      <section className="py-12 px-4 md:px-6 lg:py-16 bg-[#efefef]">
-        <div className="max-w-5xl mx-auto text-center mb-12">
-          <p className="text-gray-600">No items available at this moment.</p>
+      <section className="py-12 px-4">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="text-red-500">{error}</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-12 px-4 md:px-6 lg:py-16 bg-[#efefef]">
-      {/* Tab Buttons */}
-      <div className="flex justify-center mb-12">
-        <div className="inline-flex rounded-md shadow-md p-1 bg-white">
-          <button
-            className={clsx(
-              "px-6 py-3 rounded-md font-medium",
-              activeTab === "products"
-                ? "bg-[#634647] text-white"
-                : "text-gray-600 hover:text-[#634647]"
-            )}
-            onClick={() => handleTabChange("products")}
-          >
-            Products
-          </button>
-          <button
-            className={clsx(
-              "px-6 py-3 rounded-md font-medium",
-              activeTab === "services"
-                ? "bg-[#634647] text-white"
-                : "text-gray-600 hover:text-[#634647]"
-            )}
-            onClick={() => handleTabChange("services")}
-          >
-            Services
-          </button>
-        </div>
-      </div>
+    <section className="py-12 px-4 bg-[#fdfaf8]">
+      <div className="max-w-5xl mx-auto">
+        {/* Tabs */}
+        <Tabs
+          aria-label="Product and Service Options"
+          className="mb-8"
+          classNames={{
+            tab: "data-[selected=true]:text-[#634647] data-[selected=true]:border-[#634647]",
+            tabList:
+              "gap-6 w-full relative rounded-none border-b border-divider",
+            cursor: "w-full bg-[#634647]",
+          }}
+          color="primary"
+          selectedKey={activeTab}
+          variant="underlined"
+          onSelectionChange={(key) =>
+            handleTabChange(key as "products" | "services")
+          }
+        >
+          <Tab key="products" title="Products" />
+          <Tab key="services" title="Services" />
+        </Tabs>
 
-      {/* Content Area */}
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Left side - Image */}
-        <div className="flex justify-center">
-          <div className="relative w-full max-w-md aspect-square bg-white rounded-lg p-4 border overflow-hidden">
-            {!isCurrentImageLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
-                <div className="w-10 h-10 border-4 border-t-[#634647] border-[#ddad81] rounded-full animate-spin" />
-              </div>
-            )}
-            <div
-              className="transition-opacity duration-150 ease-in-out"
-              style={{ opacity: isCurrentImageLoaded ? 1 : 0 }}
-            >
-              <Image
-                fill
-                priority
-                unoptimized // Bypass Next.js image optimization for troubleshooting
-                alt={selectedItem.title}
-                loading="eager"
-                quality={80}
-                sizes="(max-width: 768px) 100vw, 400px"
-                src={selectedItem.image || placeholderImage}
-                style={{ objectFit: "contain", objectPosition: "center" }}
-                onError={(e) => {
-                  // eslint-disable-next-line no-console
-                  console.log(`Failed to load image: ${selectedItem.image}`);
-                  // Fallback to placeholder if image fails to load
-                  const target = e.target as HTMLImageElement;
-
-                  target.src = placeholderImage;
-                  // Add to loaded images set to hide spinner
-                  setLoadedImages((prev) => {
-                    const newSet = new Set(prev);
-
-                    newSet.add(selectedItem.image);
-
-                    return newSet;
-                  });
-                }}
-                onLoad={() => {
-                  setLoadedImages((prev) => {
-                    const newSet = new Set(prev);
-
-                    newSet.add(selectedItem.image);
-
-                    return newSet;
-                  });
-                }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Right side - Accordion */}
-        <div className="flex flex-col space-y-4">
-          {currentData.map((item) => (
-            <div
-              key={item.id}
-              className="border rounded-lg overflow-hidden bg-white"
-            >
-              <button
-                className="w-full p-4 flex justify-between items-center bg-white"
-                onClick={() => handleAccordionToggle(item.id)}
-              >
-                <span className="font-medium">{item.title}</span>
-                <span>
-                  {expandedItem === item.id ? (
-                    <svg
-                      fill="none"
-                      height="24"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      width="24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <polyline points="18 15 12 9 6 15" />
-                    </svg>
-                  ) : (
-                    <svg
-                      fill="none"
-                      height="24"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      width="24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  )}
-                </span>
-              </button>
-
-              {expandedItem === item.id && (
-                <div className="p-4 border-t">
-                  <p>{item.description}</p>
+        {/* Content Grid */}
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Left side - Image */}
+          <div className="flex justify-center">
+            <div className="relative w-full max-w-md aspect-square bg-white rounded-lg p-4 border overflow-hidden">
+              {!isCurrentImageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
+                  <div className="w-10 h-10 border-4 border-t-[#634647] border-[#ddad81] rounded-full animate-spin" />
                 </div>
               )}
+              <div
+                className="transition-opacity duration-150 ease-in-out"
+                style={{ opacity: isCurrentImageLoaded ? 1 : 0 }}
+              >
+                {selectedItem && (
+                  <Image
+                    fill
+                    priority
+                    unoptimized // Bypass Next.js image optimization for troubleshooting
+                    alt={selectedItem.title}
+                    loading="eager"
+                    quality={80}
+                    sizes="(max-width: 768px) 100vw, 400px"
+                    src={selectedItem.image || placeholderImage}
+                    style={{ objectFit: "contain", objectPosition: "center" }}
+                    onError={(e) => {
+                      // eslint-disable-next-line no-console
+                      console.log(
+                        `Failed to load image: ${selectedItem.image}`
+                      );
+                      // Fallback to placeholder if image fails to load
+                      const target = e.target as HTMLImageElement;
+
+                      target.src = placeholderImage;
+                      // Add to loaded images set to hide spinner
+                      setLoadedImages((prev) => {
+                        const newSet = new Set(prev);
+
+                        newSet.add(selectedItem.image);
+
+                        return newSet;
+                      });
+                    }}
+                    onLoad={() => {
+                      setLoadedImages((prev) => {
+                        const newSet = new Set(prev);
+
+                        newSet.add(selectedItem.image);
+
+                        return newSet;
+                      });
+                    }}
+                  />
+                )}
+              </div>
             </div>
-          ))}
+          </div>
+
+          {/* Right side - Accordion */}
+          <div className="flex flex-col space-y-4">
+            <Accordion
+              className="bg-white"
+              selectedKeys={[expandedItem]}
+              selectionMode="single"
+              variant="bordered"
+              onSelectionChange={(keys) => {
+                const keysArray = Array.from(keys as Set<string>);
+
+                if (keysArray.length > 0) {
+                  handleAccordionToggle(keysArray[0]);
+                }
+              }}
+            >
+              {currentData.map((item) => (
+                <AccordionItem
+                  key={item.id}
+                  aria-label={item.title}
+                  classNames={{
+                    title: "font-medium",
+                    trigger: "data-[hover=true]:bg-[#634647]/10",
+                    content: "text-base text-default-500",
+                  }}
+                  title={item.title}
+                >
+                  <p>{item.description}</p>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
         </div>
       </div>
     </section>
