@@ -136,6 +136,7 @@ export default function ServicesSection() {
               onError={(e) => {
                 // Fallback to placeholder if image fails to load
                 const target = e.target as HTMLImageElement;
+
                 target.src = placeholderImage;
               }}
             />

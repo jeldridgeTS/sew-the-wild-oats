@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { verifyAdminRequest, AdminAuthResult } from "@/auth/utils";
-
+import { verifyAdminRequest } from "@/auth/utils";
 import { getProducts, addProduct } from "@/lib/supabase-data";
 
 // GET all products
@@ -45,7 +44,7 @@ export async function POST(request: NextRequest) {
     if (!data.title || !data.description || !data.image) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 

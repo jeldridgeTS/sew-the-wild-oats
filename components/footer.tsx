@@ -18,7 +18,7 @@ export default function Footer() {
               key={item.href}
               className={clsx(
                 linkStyles({ color: "foreground" }),
-                "data-[active=true]:text-primary hover:text-primary-700 data-[active=true]:font-medium px-5 py-2"
+                "data-[active=true]:text-primary hover:text-primary-700 data-[active=true]:font-medium px-5 py-2",
               )}
               color="foreground"
               href={item.href}

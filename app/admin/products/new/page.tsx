@@ -28,7 +28,7 @@ export default function NewProductPage() {
   ];
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
 
@@ -84,7 +84,7 @@ export default function NewProductPage() {
       // eslint-disable-next-line no-console
       console.error("Upload error:", error);
       setUploadError(
-        error instanceof Error ? error.message : "Failed to upload image"
+        error instanceof Error ? error.message : "Failed to upload image",
       );
       toast.error("Failed to upload image");
     } finally {

@@ -33,7 +33,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
     emblaApi,
-    onNavButtonClick
+    onNavButtonClick,
   );
 
   // useEffect(() => {
@@ -83,7 +83,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
             <DotButton
               key={index}
               className={"embla__dot".concat(
-                index === selectedIndex ? " embla__dot--selected" : ""
+                index === selectedIndex ? " embla__dot--selected" : "",
               )}
               onClick={() => onDotButtonClick(index)}
             />

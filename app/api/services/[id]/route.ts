@@ -11,7 +11,7 @@ import {
 // GET a single service by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const service = await getServiceById(params.id);
@@ -35,7 +35,7 @@ export async function GET(
 
     return NextResponse.json(
       { error: "Failed to fetch service" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -43,7 +43,7 @@ export async function GET(
 // PUT to update a service (protected, admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     // First verify the admin token
@@ -59,7 +59,7 @@ export async function PUT(
     if (!data.title && !data.description && !data.image) {
       return NextResponse.json(
         { error: "No valid fields to update" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -90,7 +90,7 @@ export async function PUT(
 
     return NextResponse.json(
       { error: "Failed to update service" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -98,7 +98,7 @@ export async function PUT(
 // DELETE a service (protected, admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     // First verify the admin token
@@ -121,7 +121,7 @@ export async function DELETE(
 
     return NextResponse.json(
       { error: "Failed to delete service" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

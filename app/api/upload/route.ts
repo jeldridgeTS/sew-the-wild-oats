@@ -12,7 +12,7 @@ const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!supabaseUrl || !supabaseServiceRoleKey) {
   // eslint-disable-next-line no-console
   console.error(
-    "Missing required environment variables for Supabase admin client"
+    "Missing required environment variables for Supabase admin client",
   );
   // We'll handle this in the route handler by checking if supabaseAdmin is null
 }
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
             error: "Unauthorized - Admin authentication required",
             details: adminAuth.error,
           },
-          { status: 401 }
+          { status: 401 },
         );
       }
     } catch (authCheckError) {
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json(
         { error: "Auth check error", details: String(authCheckError) },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
           error:
             "Invalid file type. Please upload an image (JPEG, PNG, WEBP, or GIF).",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     if (file.size > maxSize) {
       return NextResponse.json(
         { error: "File too large. Maximum size is 5MB." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -105,12 +105,12 @@ export async function POST(request: NextRequest) {
     if (!supabaseAdmin) {
       // eslint-disable-next-line no-console
       console.error(
-        "Supabase admin client is not initialized - check your environment variables"
+        "Supabase admin client is not initialized - check your environment variables",
       );
 
       return NextResponse.json(
         { error: "File upload service is not properly configured" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json(
           { error: `Failed to upload file: ${error.message}` },
-          { status: 500 }
+          { status: 500 },
         );
       }
 
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json(
         { error: `Supabase operation failed: ${String(supabaseError)}` },
-        { status: 500 }
+        { status: 500 },
       );
     }
   } catch (error) {
@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
         error: "Internal server error",
         details: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

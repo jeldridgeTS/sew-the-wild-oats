@@ -32,6 +32,7 @@ export default function AdminServicesPage() {
         }
 
         const data = await response.json();
+
         setServices(data);
         setMessage({ type: "", text: "" });
       } catch (error) {
@@ -95,14 +96,14 @@ export default function AdminServicesPage() {
         <h1 className="text-3xl font-bold">Manage Services</h1>
         <div className="flex gap-4">
           <button
-            onClick={() => router.push("/admin")}
             className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-opacity-90"
+            onClick={() => router.push("/admin")}
           >
             Back to Dashboard
           </button>
           <button
-            onClick={() => router.push("/admin/services/new")}
             className="bg-[#634647] text-white px-4 py-2 rounded hover:bg-opacity-90"
+            onClick={() => router.push("/admin/services/new")}
           >
             Add New Service
           </button>
@@ -137,12 +138,12 @@ export default function AdminServicesPage() {
               >
                 <div className="w-full md:w-48 h-48 relative">
                   <Image
-                    src={service.image}
-                    alt={service.title}
                     fill
+                    unoptimized // Remove in production
+                    alt={service.title}
                     className="object-cover rounded-md"
                     sizes="(max-width: 768px) 100vw, 192px"
-                    unoptimized // Remove in production
+                    src={service.image}
                   />
                 </div>
 
@@ -154,16 +155,16 @@ export default function AdminServicesPage() {
 
                   <div className="flex gap-3">
                     <button
+                      className="bg-[#ddad81] text-[#634647] px-4 py-2 rounded hover:bg-opacity-80"
                       onClick={() =>
                         router.push(`/admin/services/edit/${service.id}`)
                       }
-                      className="bg-[#ddad81] text-[#634647] px-4 py-2 rounded hover:bg-opacity-80"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(service.id)}
                       className="bg-red-500 text-white px-4 py-2 rounded hover:bg-opacity-80"
+                      onClick={() => handleDelete(service.id)}
                     >
                       Delete
                     </button>

@@ -84,10 +84,10 @@ export default function AdminLoginPage() {
                   Username
                 </label>
                 <input
+                  required
                   className="w-full px-3 py-2 border rounded-md"
                   id="username"
                   placeholder="Enter admin username"
-                  required
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -99,9 +99,9 @@ export default function AdminLoginPage() {
                   Password
                 </label>
                 <input
+                  required
                   className="w-full px-3 py-2 border rounded-md"
                   id="password"
-                  required
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
