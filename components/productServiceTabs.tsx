@@ -10,7 +10,6 @@ import Image from "next/image";
 import clsx from "clsx";
 
 // Local imports
-import { fontCaladea } from "@/config/fonts";
 
 // Define types for products and services
 type Item = {

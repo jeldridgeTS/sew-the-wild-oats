@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { verifyAdminRequest } from "../auth/utils";
+import { verifyAdminRequest, AdminAuthResult } from "@/auth/utils";
 
 import { getProducts, addProduct } from "@/lib/supabase-data";
 
@@ -33,9 +33,9 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     // First verify the admin token
-    const isAdmin = await verifyAdminRequest(request);
+    const adminAuth = await verifyAdminRequest();
 
-    if (!isAdmin) {
+    if (!adminAuth.isValid) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

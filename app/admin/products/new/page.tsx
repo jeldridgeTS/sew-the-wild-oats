@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { toast, Toaster } from "react-hot-toast";
 
 import { fontCaladea } from "@/config/fonts";
 
@@ -15,9 +16,11 @@ export default function NewProductPage() {
   });
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
   const [error, setError] = useState("");
 
-  // Mock image options - in a real app, these would come from an image library or upload system
+  // Image options - these can be expanded or modified as needed
   const imageOptions = [
     { src: "/quilt.jpg", alt: "Quilt" },
     { src: "/horse.jpg", alt: "Horse" },
@@ -41,6 +44,52 @@ export default function NewProductPage() {
       image: src,
     });
     setPreviewImage(src);
+    // Clear any previous upload errors when selecting a predefined image
+    setUploadError("");
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    // Reset states
+    setIsUploading(true);
+    setUploadError("");
+
+    try {
+      // Create form data for upload
+      const formData = new FormData();
+
+      formData.append("file", file);
+
+      // Send file to upload endpoint
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+        credentials: "include", // Important to include cookies for auth
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to upload image");
+      }
+
+      // Set the image URL in form data
+      setFormData((prev) => ({ ...prev, image: result.url }));
+      setPreviewImage(result.url);
+      toast.success("Image uploaded successfully");
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Upload error:", error);
+      setUploadError(
+        error instanceof Error ? error.message : "Failed to upload image"
+      );
+      toast.error("Failed to upload image");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,6 +152,7 @@ export default function NewProductPage() {
 
   return (
     <div className={`${fontCaladea.className} min-h-screen p-8`}>
+      <Toaster position="top-center" />
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Add New Product</h1>
@@ -162,9 +212,62 @@ export default function NewProductPage() {
 
           <div className="mb-6">
             <h3 className="block text-gray-700 mb-3 font-medium">
-              Select an Image
+              Select an Image or{" "}
+              <button
+                className="text-[#634647] underline font-medium hover:text-[#ddad81] focus:outline-none"
+                type="button"
+                onClick={() => document.getElementById("file-upload")?.click()}
+              >
+                upload
+              </button>
             </h3>
+
+            {/* File Upload Input (hidden) */}
+            <input
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              className="hidden"
+              id="file-upload"
+              type="file"
+              onChange={handleFileUpload}
+            />
+
+            {isUploading && (
+              <div className="mb-4 flex items-center">
+                <div className="w-5 h-5 border-2 border-t-[#634647] border-[#ddad81] rounded-full animate-spin mr-2" />
+                <p>Uploading image...</p>
+              </div>
+            )}
+
+            {uploadError && (
+              <div className="mb-4 p-3 bg-red-100 text-red-800 rounded">
+                {uploadError}
+              </div>
+            )}
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {/* User uploaded image (if exists) */}
+              {formData.image && formData.image.startsWith("https://") && (
+                <button
+                  aria-label="Your uploaded image"
+                  aria-pressed={true}
+                  className="relative h-40 cursor-pointer border-2 rounded overflow-hidden p-0 border-[#634647] focus:outline-none focus:ring-2 focus:ring-[#634647] focus:border-[#634647]"
+                  type="button"
+                >
+                  <div className="font-size-0 text-[0px] leading-[0px] w-full h-full">
+                    <Image
+                      fill
+                      unoptimized // Remove in production
+                      alt=""
+                      className="object-cover"
+                      sizes="(max-width: 768px) 50vw, 33vw"
+                      src={formData.image}
+                      title="Your uploaded image"
+                    />
+                  </div>
+                </button>
+              )}
+
+              {/* Predefined image options */}
               {imageOptions.map((image) => (
                 <button
                   key={image.src}
@@ -187,11 +290,11 @@ export default function NewProductPage() {
                     <Image
                       fill
                       unoptimized // Remove in production
-                      alt="" /* Removing alt text content to prevent labels */
-                      title={image.alt} /* Keeping the title for tooltips */
+                      alt={image.alt}
                       className="object-cover"
                       sizes="(max-width: 768px) 50vw, 33vw"
                       src={image.src}
+                      title={image.alt}
                     />
                   </div>
                 </button>
