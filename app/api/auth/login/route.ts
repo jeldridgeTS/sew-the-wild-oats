@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 
+// Using CommonJS require syntax to avoid TypeScript typing issues with jsonwebtoken
 import {
   JWT_SECRET,
   JWT_EXPIRY,
   ADMIN_USERNAME,
   ADMIN_PASSWORD,
 } from "../config";
+
+const jwt = require("jsonwebtoken");
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,14 +25,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate JWT token
-    const token = jwt.sign(
-      {
-        username,
-        role: "admin",
-      },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRY }
-    );
+    const payload = {
+      username,
+      role: "admin",
+    };
+
+    // Sign the token with JWT_SECRET
+    // Using the require-imported jwt to bypass TypeScript typing issues
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
 
     // Set cookie with the token
     const response = NextResponse.json(
