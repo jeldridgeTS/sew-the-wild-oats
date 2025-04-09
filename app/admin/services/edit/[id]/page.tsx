@@ -38,9 +38,6 @@ export default function EditServicePage({
     { src: "/quilt.jpg", alt: "Quilt" },
     { src: "/horse.jpg", alt: "Horse" },
     { src: "/goat.jpg", alt: "Goat" },
-    { src: "/sewing.jpg", alt: "Sewing" },
-    { src: "/alterations.jpg", alt: "Alterations" },
-    { src: "/pattern.jpg", alt: "Pattern Making" },
   ];
 
   // Fetch service data from API on component mount
@@ -249,14 +246,17 @@ export default function EditServicePage({
                   onClick={() => selectImage(image.src)}
                   onKeyDown={(e) => e.key === "Enter" && selectImage(image.src)}
                 >
-                  <Image
-                    fill
-                    unoptimized // Remove in production
-                    alt={image.alt}
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, 33vw"
-                    src={image.src}
-                  />
+                  <div className="font-size-0 text-[0px] leading-[0px] w-full h-full">
+                    <Image
+                      fill
+                      unoptimized // Remove in production
+                      alt="" /* Removing alt text content to prevent labels */
+                      title={image.alt} /* Keeping the title for tooltips */
+                      className="object-cover"
+                      sizes="(max-width: 768px) 50vw, 33vw"
+                      src={image.src}
+                    />
+                  </div>
                 </button>
               ))}
             </div>
