@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 // NextUI imports
-import { Tabs, Tab, Accordion, AccordionItem } from "@nextui-org/react";
+import { Accordion, AccordionItem } from "@nextui-org/react";
 
 // Import CSS module
 import styles from "./styles.module.css";
@@ -164,29 +164,52 @@ export default function ProductServiceTabs() {
   return (
     <section className={styles.container}>
       <div className={styles.tabsContainer}>
-        {/* Tabs */}
-        <Tabs
+        {/* Custom Tabs - with proper accessibility */}
+        <div 
           aria-label="Product and Service Options"
-          className="mb-8"
-          classNames={{
-            tab: "data-[selected=true]:text-[#634647] data-[selected=true]:border-[#634647]",
-            tabList:
-              "gap-6 w-full relative rounded-none border-b border-divider",
-            cursor: "w-full bg-[#634647]",
-          }}
-          color="primary"
-          selectedKey={activeTab}
-          variant="underlined"
-          onSelectionChange={(key) =>
-            handleTabChange(key as "products" | "services")
-          }
+          className="flex justify-center mb-10" 
+          role="tablist"
         >
-          <Tab key="products" title="Products" />
-          <Tab key="services" title="Services" />
-        </Tabs>
+          <div className="flex space-x-12">
+            <button
+              aria-controls="products-panel"
+              aria-selected={activeTab === "products"}
+              className={`${styles.tabItem} ${styles.tabItemHover} ${activeTab === "products" ? styles.tabItemSelected : ""} group focus:outline-none focus:ring-2 focus:ring-[#634647] focus:ring-offset-2 rounded-sm`}
+              id="products-tab"
+              onClick={() => handleTabChange("products")}
+              onKeyDown={(e) => 
+                e.key === "Enter" && handleTabChange("products")
+              }
+              role="tab"
+            >
+              Products
+              <span className={styles.tabUnderline} />
+            </button>
+            <button
+              aria-controls="services-panel"
+              aria-selected={activeTab === "services"}
+              className={`${styles.tabItem} ${styles.tabItemHover} ${activeTab === "services" ? styles.tabItemSelected : ""} group focus:outline-none focus:ring-2 focus:ring-[#634647] focus:ring-offset-2 rounded-sm`}
+              id="services-tab"
+              onClick={() => handleTabChange("services")}
+              onKeyDown={(e) => 
+                e.key === "Enter" && handleTabChange("services")
+              }
+              role="tab"
+            >
+              Services
+              <span className={styles.tabUnderline} />
+            </button>
+          </div>
+        </div>
 
-        {/* Content Grid */}
-        <div className={styles.contentGrid}>
+        {/* Content Grid - with proper accessibility */}
+        <div 
+          aria-labelledby={`${activeTab}-tab`}
+          className={styles.contentGrid}
+          id={`${activeTab}-panel`}
+          role="tabpanel"
+        >
+
           {/* Left side - Image */}
           <div className={styles.imageContainer}>
             <div className={styles.imageWrapper}>
