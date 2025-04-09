@@ -78,6 +78,7 @@ export default function NewServicePage() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // Include authentication cookies
         body: JSON.stringify(formData),
       });
 
