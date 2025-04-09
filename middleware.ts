@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
+// Get JWT_SECRET from environment variables with fallback
+const JWT_SECRET_VALUE =
+  process.env.JWT_SECRET ||
+  (process.env.NODE_ENV === "production"
+    ? ""
+    : "DEV_ONLY_SECRET_7a6cdd2f-d4e2-4c37-9b60-df09af6c853b");
+
 // Convert JWT_SECRET to TextEncoder for jose
-const JWT_SECRET = new TextEncoder().encode(
-  "your-super-secret-key-replace-in-production"
-);
+const JWT_SECRET = new TextEncoder().encode(JWT_SECRET_VALUE);
 
 // This function is async since we need to verify the JWT token
 export async function middleware(request: NextRequest) {
@@ -17,7 +22,7 @@ export async function middleware(request: NextRequest) {
 
   // Define admin paths that require authentication
   const isAdminPath = ["/admin"].some(
-    (publicPath) => path === publicPath || path.startsWith(`${publicPath}/`)
+    (publicPath) => path === publicPath || path.startsWith(`${publicPath}/`),
   );
 
   // Don't apply middleware to non-admin routes
