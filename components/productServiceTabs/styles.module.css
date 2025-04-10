@@ -171,7 +171,43 @@
 }
 
 .accordionDescription {
-  padding: 0 0.75rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, rgba(204, 237, 217, 0.15), rgba(221, 173, 129, 0.08));
+  border-left: 2px solid #ddad81;
+  margin: 0.5rem 0.25rem 0.75rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #4a4a4a;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.accordionDescription::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 10px;
+  width: 20px;
+  height: 20px;
+  background-color: #ddad81;
+  opacity: 0.2;
+  border-radius: 50%;
+  transform: scale(0.8);
+  z-index: -1;
+}
+
+.accordionDescription::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  right: 20px;
+  width: 35px;
+  height: 20px;
+  background-color: #ccedd9;
+  opacity: 0.2;
+  border-radius: 20px;
+  z-index: -1;
 }
 
 .loadingContent,
