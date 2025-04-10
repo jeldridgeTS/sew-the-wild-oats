@@ -279,7 +279,7 @@ export default function ProductServiceTabs() {
                     quality={80}
                     sizes="(max-width: 768px) 100vw, 400px"
                     src={selectedItem.image || placeholderImage}
-                    style={{ objectFit: "contain", objectPosition: "center" }}
+                    style={{ objectFit: "cover", objectPosition: "center" }}
                     onError={(e) => {
                       // eslint-disable-next-line no-console
                       console.log(
