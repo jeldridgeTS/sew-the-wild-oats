@@ -71,32 +71,10 @@ export default function ProductServiceTabs() {
   // Get current data based on active tab
   const currentData = activeTab === "products" ? products : services;
 
-  // Find the currently selected item for image display
-  // eslint-disable-next-line no-console
-  console.log(
-    "Current data:",
-    currentData.map((item) => ({ id: item.id, title: item.title }))
-  );
-  // eslint-disable-next-line no-console
-  console.log(
-    "Looking for expandedItem:",
-    expandedItem,
-    "type:",
-    typeof expandedItem
-  );
-
   // Use strict comparison and ensure both sides are strings
   const selectedItem =
     currentData.find((item) => String(item.id) === String(expandedItem)) ||
     (currentData.length > 0 ? currentData[0] : null);
-
-  // eslint-disable-next-line no-console
-  console.log(
-    "Selected item:",
-    selectedItem?.title,
-    selectedItem?.id,
-    selectedItem?.image
-  );
 
   // Check if the current image is loaded
   const isCurrentImageLoaded = selectedItem
@@ -267,24 +245,20 @@ export default function ProductServiceTabs() {
                 </div>
               )}
               <div
-                className={styles.imageContent}
-                style={{ opacity: isCurrentImageLoaded ? 1 : 0 }}
+                className={`${styles.imageContent} ${isCurrentImageLoaded ? styles.imageLoaded : styles.imageUnloaded}`}
               >
                 {selectedItem && (
                   <Image
                     fill
                     priority
                     alt={selectedItem.title}
+                    className={styles.productImage}
                     loading="eager"
                     quality={80}
                     sizes="(max-width: 768px) 100vw, 400px"
                     src={selectedItem.image || placeholderImage}
-                    style={{ objectFit: "cover", objectPosition: "center" }}
                     onError={(e) => {
-                      // eslint-disable-next-line no-console
-                      console.log(
-                        `Failed to load image: ${selectedItem.image}`
-                      );
+                      // Handle image load failure
                       // Fallback to placeholder if image fails to load
                       const target = e.target as HTMLImageElement;
 
@@ -319,13 +293,13 @@ export default function ProductServiceTabs() {
               className={styles.accordionWrapper}
               selectedKeys={expandedItem ? new Set([expandedItem]) : new Set()}
               selectionMode="single"
-              variant="bordered"
+              variant="light"
+              showDivider={true}
               onSelectionChange={(keys) => {
                 // Extract keys correctly as a Set
                 const keysArray = Array.from(keys);
 
-                // eslint-disable-next-line no-console
-                console.log("Selected accordion keys:", keysArray);
+                // Keys have been selected
 
                 if (keysArray.length > 0) {
                   // Convert the key to string and update the expanded item
@@ -333,18 +307,22 @@ export default function ProductServiceTabs() {
                 }
               }}
             >
-              {currentData.map((item) => (
+              {currentData.map((item, index) => (
                 <AccordionItem
                   key={item.id}
                   aria-label={item.title}
                   classNames={{
-                    title: "font-medium",
-                    trigger: "data-[hover=true]:bg-[#634647]/10",
-                    content: "text-base text-default-500",
+                    base: "py-0 w-full",
+                    title: "font-bold px-3",
+                    trigger: `py-3 px-3 bg-[#ccedd9]/60 data-[hover=true]:bg-[#ccedd9]/40 flex justify-between ${index === 0 ? "rounded-t-lg" : ""} ${index === currentData.length - 1 ? "rounded-b-lg" : ""}`,
+                    indicator: "text-[#254e70] block",
+                    content: "text-base text-default-500 px-3 py-2",
                   }}
                   title={item.title}
                 >
-                  <p>{item.description}</p>
+                  <p className={styles.accordionDescription}>
+                    {item.description}
+                  </p>
                 </AccordionItem>
               ))}
             </Accordion>
