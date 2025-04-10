@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
       return NextResponse.json(
         { success: false, message: "Invalid credentials" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
 
     // Sign the token with JWT_SECRET
     // Using the require-imported jwt to bypass TypeScript typing issues
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY },);
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
 
     // Set cookie with the token
     const response = NextResponse.json(

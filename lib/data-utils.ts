@@ -54,7 +54,7 @@ export async function saveProducts(products: Product[]): Promise<boolean> {
     await fs.promises.writeFile(
       productsFilePath,
       JSON.stringify(products, null, 2),
-      "utf8"
+      "utf8",
     );
 
     return true;
@@ -68,7 +68,7 @@ export async function saveProducts(products: Product[]): Promise<boolean> {
 
 // Add a new product
 export async function addProduct(
-  product: Omit<Product, "id">
+  product: Omit<Product, "id">,
 ): Promise<Product> {
   try {
     const products = await getProducts();
@@ -90,7 +90,7 @@ export async function addProduct(
 // Update an existing product
 export async function updateProduct(
   id: string,
-  productData: Partial<Product>
+  productData: Partial<Product>,
 ): Promise<Product | null> {
   try {
     const products = await getProducts();
@@ -172,7 +172,7 @@ export async function saveServices(services: Service[]): Promise<boolean> {
     await fs.promises.writeFile(
       servicesFilePath,
       JSON.stringify(services, null, 2),
-      "utf8"
+      "utf8",
     );
 
     return true;
@@ -186,7 +186,7 @@ export async function saveServices(services: Service[]): Promise<boolean> {
 
 // Add a new service
 export async function addService(
-  service: Omit<Service, "id">
+  service: Omit<Service, "id">,
 ): Promise<Service> {
   try {
     const services = await getServices();
@@ -208,7 +208,7 @@ export async function addService(
 // Update an existing service
 export async function updateService(
   id: string,
-  serviceData: Partial<Service>
+  serviceData: Partial<Service>,
 ): Promise<Service | null> {
   try {
     const services = await getServices();

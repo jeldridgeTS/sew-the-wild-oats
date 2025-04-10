@@ -33,7 +33,7 @@ export default function ProductCard() {
         <h5
           className={clsx(
             "text-large italic mb-2 text-left mr-auto text-zinc-700",
-            fontCaladea.className
+            fontCaladea.className,
           )}
         >
           Products

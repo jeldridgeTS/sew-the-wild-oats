@@ -5,7 +5,7 @@ export async function POST(_request: NextRequest) {
     // Create response
     const response = NextResponse.json(
       { success: true, message: "Logged out successfully" },
-      { status: 200 }
+      { status: 200 },
     );
 
     // Clear the auth cookie
@@ -23,7 +23,7 @@ export async function POST(_request: NextRequest) {
 
     return NextResponse.json(
       { success: false, message: "Error during logout" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

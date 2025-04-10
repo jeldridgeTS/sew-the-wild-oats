@@ -24,7 +24,7 @@ export async function GET() {
 
     return NextResponse.json(
       { error: "Failed to fetch services" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     if (!data.title || !data.description || !data.image) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { error: "Failed to create service" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

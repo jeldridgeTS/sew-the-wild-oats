@@ -71,6 +71,7 @@ export default function NewServicePage() {
 
       if (!response.ok) {
         const errorData = await response.json();
+
         throw new Error(errorData.message || "Failed to upload image");
       }
 
@@ -250,11 +251,11 @@ export default function NewServicePage() {
                 >
                   <div className="font-size-0 text-[0px] leading-[0px] w-full h-full">
                     <Image
-                      alt="" /* Removing alt text content to prevent labels */
-                      className="object-cover"
                       fill
                       sizes="(max-width: 768px) 50vw, 33vw"
                       src={image.src}
+                      alt="" /* Removing alt text content to prevent labels */
+                      className="object-cover"
                       title={image.alt} /* Keeping the title for tooltips */
                       unoptimized // Remove in production
                     />
@@ -271,12 +272,12 @@ export default function NewServicePage() {
               </h3>
               <div className="relative h-60 w-full max-w-md">
                 <Image
+                  fill
+                  unoptimized // Remove in production
                   alt="Preview"
                   className="object-cover rounded-md"
-                  fill
                   sizes="(max-width: 768px) 100vw, 400px"
                   src={previewImage}
-                  unoptimized // Remove in production
                 />
               </div>
             </div>

@@ -38,7 +38,7 @@ export default function RootLayout({
       <body
         className={clsx(
           "sew-light min-h-screen bg-background font-sans antialiased",
-          fontCaladea.className
+          fontCaladea.className,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>

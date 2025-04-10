@@ -43,7 +43,7 @@ export async function isValidAdminToken(token: string): Promise<boolean> {
  * Extracts token from cookies and verifies admin role
  */
 export async function verifyAdminRequest(
-  request: NextRequest
+  request: NextRequest,
 ): Promise<boolean> {
   try {
     // Get token from cookies
