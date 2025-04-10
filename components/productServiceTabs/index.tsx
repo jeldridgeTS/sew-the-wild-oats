@@ -103,44 +103,69 @@ export default function ProductServiceTabs() {
     ? loadedImages.has(selectedItem.image)
     : false;
 
-  // Eagerly preload all images immediately when component mounts or data changes
   useEffect(() => {
-    // Preload all images at once
+    if (!selectedItem) return;
+
+    const preloadSelectedImage = new Promise<void>((resolve) => {
+      if (loadedImages.has(selectedItem.image)) {
+        resolve();
+
+        return;
+      }
+
+      const img = new window.Image();
+
+      img.onload = () => {
+        setLoadedImages((prev) => {
+          const newSet = new Set(prev);
+
+          newSet.add(selectedItem.image);
+
+          return newSet;
+        });
+        resolve();
+      };
+      img.onerror = () => resolve(); // even on error resolve
+      img.src = selectedItem.image;
+    });
+
+    preloadSelectedImage.catch(() => {
+      // no-op
+    });
+
+    // Preload all other images in background (if not already)
     const allItems = [...products, ...services];
+    const preloadOtherImages = allItems
+      .filter((item) => item.image !== selectedItem.image)
+      .map((item) => {
+        return new Promise<void>((resolve) => {
+          if (loadedImages.has(item.image)) {
+            resolve();
 
-    if (allItems.length === 0) return;
+            return;
+          }
 
-    // Create an array of promises for all image loads
-    const preloadPromises = allItems.map((item) => {
-      return new Promise<void>((resolve) => {
-        if (loadedImages.has(item.image)) {
-          resolve(); // Already loaded
+          const img = new window.Image();
 
-          return;
-        }
+          img.onload = () => {
+            setLoadedImages((prev) => {
+              const newSet = new Set(prev);
 
-        const img = new window.Image();
+              newSet.add(item.image);
 
-        img.onload = () => {
-          setLoadedImages((prev) => {
-            const newSet = new Set(prev);
-
-            newSet.add(item.image);
-
-            return newSet;
-          });
-          resolve();
-        };
-        img.onerror = () => resolve(); // Resolve even on error to prevent hanging
-        img.src = item.image;
+              return newSet;
+            });
+            resolve();
+          };
+          img.onerror = () => resolve();
+          img.src = item.image;
+        });
       });
-    });
 
-    // Run all preloads in parallel
-    Promise.all(preloadPromises).catch(() => {
-      // Silent catch
+    Promise.all(preloadOtherImages).catch(() => {
+      // no-op
     });
-  }, [products, services, loadedImages]);
+  }, [selectedItem, products, services]);
 
   // Handle tab change
   const handleTabChange = (tab: "products" | "services") => {
@@ -249,7 +274,6 @@ export default function ProductServiceTabs() {
                   <Image
                     fill
                     priority
-                    unoptimized // Bypass Next.js image optimization for troubleshooting
                     alt={selectedItem.title}
                     loading="eager"
                     quality={80}
