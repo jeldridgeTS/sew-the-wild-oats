@@ -72,9 +72,31 @@ export default function ProductServiceTabs() {
   const currentData = activeTab === "products" ? products : services;
 
   // Find the currently selected item for image display
+  // eslint-disable-next-line no-console
+  console.log(
+    "Current data:",
+    currentData.map((item) => ({ id: item.id, title: item.title }))
+  );
+  // eslint-disable-next-line no-console
+  console.log(
+    "Looking for expandedItem:",
+    expandedItem,
+    "type:",
+    typeof expandedItem
+  );
+
+  // Use strict comparison and ensure both sides are strings
   const selectedItem =
-    currentData.find((item) => item.id === expandedItem) ||
+    currentData.find((item) => String(item.id) === String(expandedItem)) ||
     (currentData.length > 0 ? currentData[0] : null);
+
+  // eslint-disable-next-line no-console
+  console.log(
+    "Selected item:",
+    selectedItem?.title,
+    selectedItem?.id,
+    selectedItem?.image
+  );
 
   // Check if the current image is loaded
   const isCurrentImageLoaded = selectedItem
@@ -132,6 +154,8 @@ export default function ProductServiceTabs() {
 
   // Handle accordion toggle
   const handleAccordionToggle = (itemId: string) => {
+    // eslint-disable-next-line no-console
+    console.log("Setting expandedItem to:", itemId);
     setExpandedItem(itemId);
   };
 
@@ -269,14 +293,19 @@ export default function ProductServiceTabs() {
           <div className={styles.accordionContainer}>
             <Accordion
               className={styles.accordionWrapper}
-              selectedKeys={[expandedItem]}
+              selectedKeys={expandedItem ? new Set([expandedItem]) : new Set()}
               selectionMode="single"
               variant="bordered"
               onSelectionChange={(keys) => {
-                const keysArray = Array.from(keys as Set<string>);
+                // Extract keys correctly as a Set
+                const keysArray = Array.from(keys);
+
+                // eslint-disable-next-line no-console
+                console.log("Selected accordion keys:", keysArray);
 
                 if (keysArray.length > 0) {
-                  handleAccordionToggle(keysArray[0]);
+                  // Convert the key to string and update the expanded item
+                  handleAccordionToggle(String(keysArray[0]));
                 }
               }}
             >
