@@ -154,7 +154,7 @@
 
 .accordionWrapper {
   width: 100%;
-  padding: 0.25rem;
+  padding: 0.75rem;
 }
 
 /* Image styling */
@@ -171,16 +171,33 @@
 }
 
 .accordionDescription {
-  padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, rgba(204, 237, 217, 0.15), rgba(221, 173, 129, 0.08));
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(204, 237, 217, 0.2),
+    rgba(221, 173, 129, 0.08)
+  );
   border-left: 2px solid #ddad81;
-  margin: 0.5rem 0.25rem 0.75rem;
-  border-radius: 0 0.5rem 0.5rem 0;
+  margin: 0.75rem 0.25rem 1rem;
+  border-radius: 0 0.75rem 0.75rem 0;
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.7;
   color: #4a4a4a;
   position: relative;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.03);
+  animation: slide-in 0.4s ease-out forwards;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .accordionDescription::before {
